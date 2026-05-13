@@ -1,29 +1,72 @@
 import { useState } from "react";
+import type { RoomData } from "../pages/Home";
+import BuildPanel from "./BuildPanel";
+import RoomPanel from "./RoomPanel";
+import AssetPanel from "./AssetPanel";
+import ToolbarPanel from "./ToolbarPanel";
 
-const PromptPanel = () => {
-  const [prompt, setPrompt] = useState("");
+interface PromptPanelProps {
+  data: RoomData | null;
+  onGenerate: (text: string) => void;
+  isGenerating: boolean;
+  onAddFurniture: (type: string, color: string) => void;
+  onUpdateRoom: (updates: Partial<RoomData>) => void;
+  selectedId: string | null;
+  onSelectItem: (id: string | null) => void;
+  onDeleteItem: (id: string) => void;
+  onMoveItem: (id: string, direction: 'forward' | 'back' | 'left' | 'right') => void;
+  activeTool: 'translate' | 'rotate';
+  onSetTool: (tool: 'translate' | 'rotate') => void;
+  generationError: string | null;
+}
 
-  const handleGenerate = () => {
-    console.log("User Prompt:", prompt);
-  };
+const PromptPanel = ({ data, onGenerate, isGenerating, onAddFurniture, onUpdateRoom, selectedId, onSelectItem, onDeleteItem, onMoveItem, activeTool, onSetTool, generationError }: PromptPanelProps) => {
+  const [activeTab, setActiveTab] = useState<'build' | 'room' | 'furnish' | 'toolbar'>('build');
 
   return (
-    <div className="w-full h-full bg-zinc-800 p-6 flex flex-col gap-4">
-      <h2 className="text-white text-lg font-semibold">Describe your room</h2>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Tab Navigation - Increased Font Size */}
+      <div className="flex border-b border-pc-surface text-sm font-bold uppercase tracking-wider bg-pc-bg/50 backdrop-blur-sm sticky top-0 z-10">
+        {(['build', 'room', 'furnish', 'toolbar'] as const).map((tab) => (
+          <button 
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`flex-1 py-5 transition-all ${
+              activeTab === tab 
+              ? 'text-pc-cyan border-b-2 border-pc-cyan bg-pc-surface/30' 
+              : 'text-pc-muted hover:text-pc-text'
+            }`}
+          >
+            {tab === 'furnish' ? 'Assets' : tab}
+          </button>
+        ))}
+      </div>
 
-      <textarea
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="e.g. A modern bedroom with LED lights and wooden floor..."
-        className="w-full h-40 p-3 rounded-lg bg-zinc-900 text-white outline-none resize-none"
-      />
+      <div className="p-8 flex-1 overflow-y-auto">
+        {activeTab === 'build' && (
+          <BuildPanel onGenerate={onGenerate} isGenerating={isGenerating} generationError={generationError} />
+        )}
 
-      <button
-        onClick={handleGenerate}
-        className="bg-green-500 py-3 rounded-lg hover:bg-green-600 transition font-semibold"
-      >
-        Generate 3D Room
-      </button>
+        {activeTab === 'room' && data && (
+          <RoomPanel data={data} onUpdateRoom={onUpdateRoom} />
+        )}
+
+        {activeTab === 'furnish' && (
+          <AssetPanel onAddFurniture={onAddFurniture} />
+        )}
+
+        {activeTab === 'toolbar' && data && (
+          <ToolbarPanel
+            data={data}
+            selectedId={selectedId}
+            onSelectItem={onSelectItem}
+            onDeleteItem={onDeleteItem}
+            onMoveItem={onMoveItem}
+            activeTool={activeTool}
+            onSetTool={onSetTool}
+          />
+        )}
+      </div>
     </div>
   );
 };

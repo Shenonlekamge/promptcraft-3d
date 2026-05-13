@@ -1,7 +1,35 @@
-import Home from "./pages/Home";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import AuthPage from './pages/AuthPage';
+import Home from './pages/Home';
+import Onboarding from './pages/Onboarding';
 
-function App() {
-  return <Home />;
-}
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!sessionStorage.getItem("user"));
+
+  // Check inline so it evaluates on render
+  const checkOnboarded = () => !!sessionStorage.getItem("onboardingComplete");
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route 
+          path="/auth" 
+          element={isAuthenticated ? <Navigate to="/onboarding" /> : <AuthPage />} 
+        />
+        <Route 
+          path="/onboarding" 
+          element={isAuthenticated ? (checkOnboarded() ? <Navigate to="/builder" /> : <Onboarding />) : <Navigate to="/auth" />} 
+        />
+        <Route 
+          path="/builder" 
+          element={isAuthenticated ? (checkOnboarded() ? <Home /> : <Navigate to="/onboarding" />) : <Navigate to="/auth" />} 
+        />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

@@ -1,0 +1,702 @@
+[
+  {
+    "type": "bathroomCabinet",
+    "label": "Bathroom Cabinet",
+    "category": "Bathroom"
+  },
+  {
+    "type": "bathroomCabinetDrawer",
+    "label": "Bathroom Cabinet Drawer",
+    "category": "Bathroom"
+  },
+  {
+    "type": "bathroomMirror",
+    "label": "Bathroom Mirror",
+    "category": "Bathroom"
+  },
+  {
+    "type": "bathroomSink",
+    "label": "Bathroom Sink",
+    "category": "Bathroom"
+  },
+  {
+    "type": "bathroomSinkSquare",
+    "label": "Bathroom Sink Square",
+    "category": "Bathroom"
+  },
+  {
+    "type": "bathtub",
+    "label": "Bathtub",
+    "category": "General"
+  },
+  {
+    "type": "bear",
+    "label": "Bear",
+    "category": "General"
+  },
+  {
+    "type": "bed",
+    "label": "Bed",
+    "category": "Bedroom"
+  },
+  {
+    "type": "bedBunk",
+    "label": "Bed Bunk",
+    "category": "Bedroom"
+  },
+  {
+    "type": "bedDouble",
+    "label": "Bed Double",
+    "category": "Bedroom"
+  },
+  {
+    "type": "bench",
+    "label": "Bench",
+    "category": "General"
+  },
+  {
+    "type": "benchCushion",
+    "label": "Bench Cushion",
+    "category": "General"
+  },
+  {
+    "type": "benchCushionLow",
+    "label": "Bench Cushion Low",
+    "category": "General"
+  },
+  {
+    "type": "bookcaseClosed",
+    "label": "Bookcase Closed",
+    "category": "Storage"
+  },
+  {
+    "type": "bookcaseClosedDoors",
+    "label": "Bookcase Closed Doors",
+    "category": "Storage"
+  },
+  {
+    "type": "bookcaseClosedWide",
+    "label": "Bookcase Closed Wide",
+    "category": "Storage"
+  },
+  {
+    "type": "bookcaseOpen",
+    "label": "Bookcase Open",
+    "category": "Storage"
+  },
+  {
+    "type": "bookcaseOpenLow",
+    "label": "Bookcase Open Low",
+    "category": "Storage"
+  },
+  {
+    "type": "books",
+    "label": "Books",
+    "category": "General"
+  },
+  {
+    "type": "cabinetBed",
+    "label": "Cabinet Bed",
+    "category": "General"
+  },
+  {
+    "type": "cabinetBedDrawer",
+    "label": "Cabinet Bed Drawer",
+    "category": "General"
+  },
+  {
+    "type": "cabinetBedDrawerTable",
+    "label": "Cabinet Bed Drawer Table",
+    "category": "General"
+  },
+  {
+    "type": "cabinetTelevision",
+    "label": "Cabinet Television",
+    "category": "General"
+  },
+  {
+    "type": "cabinetTelevisionDoors",
+    "label": "Cabinet Television Doors",
+    "category": "General"
+  },
+  {
+    "type": "cardboardBoxClosed",
+    "label": "Cardboard Box Closed",
+    "category": "General"
+  },
+  {
+    "type": "cardboardBoxOpen",
+    "label": "Cardboard Box Open",
+    "category": "General"
+  },
+  {
+    "type": "ceilingFan",
+    "label": "Ceiling Fan",
+    "category": "General"
+  },
+  {
+    "type": "chair",
+    "label": "Chair",
+    "category": "Seating"
+  },
+  {
+    "type": "chairCushion",
+    "label": "Chair Cushion",
+    "category": "Seating"
+  },
+  {
+    "type": "chairDesk",
+    "label": "Chair Desk",
+    "category": "Seating"
+  },
+  {
+    "type": "chairModernCushion",
+    "label": "Chair Modern Cushion",
+    "category": "Seating"
+  },
+  {
+    "type": "chairModernFrameCushion",
+    "label": "Chair Modern Frame Cushion",
+    "category": "Seating"
+  },
+  {
+    "type": "chairRounded",
+    "label": "Chair Rounded",
+    "category": "Seating"
+  },
+  {
+    "type": "coatRack",
+    "label": "Coat Rack",
+    "category": "General"
+  },
+  {
+    "type": "coatRackStanding",
+    "label": "Coat Rack Standing",
+    "category": "General"
+  },
+  {
+    "type": "computerKeyboard",
+    "label": "Computer Keyboard",
+    "category": "General"
+  },
+  {
+    "type": "computerMouse",
+    "label": "Computer Mouse",
+    "category": "General"
+  },
+  {
+    "type": "computerScreen",
+    "label": "Computer Screen",
+    "category": "General"
+  },
+  {
+    "type": "desk",
+    "label": "Desk",
+    "category": "General"
+  },
+  {
+    "type": "deskCorner",
+    "label": "Desk Corner",
+    "category": "General"
+  },
+  {
+    "type": "doorway",
+    "label": "Doorway",
+    "category": "General"
+  },
+  {
+    "type": "doorwayFront",
+    "label": "Doorway Front",
+    "category": "General"
+  },
+  {
+    "type": "doorwayOpen",
+    "label": "Doorway Open",
+    "category": "General"
+  },
+  {
+    "type": "dryer",
+    "label": "Dryer",
+    "category": "General"
+  },
+  {
+    "type": "floorCorner",
+    "label": "Floor Corner",
+    "category": "General"
+  },
+  {
+    "type": "floorCornerRound",
+    "label": "Floor Corner Round",
+    "category": "General"
+  },
+  {
+    "type": "floorFull",
+    "label": "Floor Full",
+    "category": "General"
+  },
+  {
+    "type": "floorHalf",
+    "label": "Floor Half",
+    "category": "General"
+  },
+  {
+    "type": "hoodLarge",
+    "label": "Hood Large",
+    "category": "General"
+  },
+  {
+    "type": "hoodModern",
+    "label": "Hood Modern",
+    "category": "General"
+  },
+  {
+    "type": "kitchenBar",
+    "label": "Kitchen Bar",
+    "category": "General"
+  },
+  {
+    "type": "kitchenBarEnd",
+    "label": "Kitchen Bar End",
+    "category": "General"
+  },
+  {
+    "type": "kitchenBlender",
+    "label": "Kitchen Blender",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinet",
+    "label": "Kitchen Cabinet",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetCornerInner",
+    "label": "Kitchen Cabinet Corner Inner",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetCornerRound",
+    "label": "Kitchen Cabinet Corner Round",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetDrawer",
+    "label": "Kitchen Cabinet Drawer",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetUpper",
+    "label": "Kitchen Cabinet Upper",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetUpperCorner",
+    "label": "Kitchen Cabinet Upper Corner",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetUpperDouble",
+    "label": "Kitchen Cabinet Upper Double",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCabinetUpperLow",
+    "label": "Kitchen Cabinet Upper Low",
+    "category": "General"
+  },
+  {
+    "type": "kitchenCoffeeMachine",
+    "label": "Kitchen Coffee Machine",
+    "category": "General"
+  },
+  {
+    "type": "kitchenFridge",
+    "label": "Kitchen Fridge",
+    "category": "General"
+  },
+  {
+    "type": "kitchenFridgeBuiltIn",
+    "label": "Kitchen Fridge Built In",
+    "category": "General"
+  },
+  {
+    "type": "kitchenFridgeLarge",
+    "label": "Kitchen Fridge Large",
+    "category": "General"
+  },
+  {
+    "type": "kitchenFridgeSmall",
+    "label": "Kitchen Fridge Small",
+    "category": "General"
+  },
+  {
+    "type": "kitchenMicrowave",
+    "label": "Kitchen Microwave",
+    "category": "General"
+  },
+  {
+    "type": "kitchenSink",
+    "label": "Kitchen Sink",
+    "category": "General"
+  },
+  {
+    "type": "kitchenStove",
+    "label": "Kitchen Stove",
+    "category": "General"
+  },
+  {
+    "type": "kitchenStoveElectric",
+    "label": "Kitchen Stove Electric",
+    "category": "General"
+  },
+  {
+    "type": "lampRoundFloor",
+    "label": "Lamp Round Floor",
+    "category": "General"
+  },
+  {
+    "type": "lampRoundTable",
+    "label": "Lamp Round Table",
+    "category": "General"
+  },
+  {
+    "type": "lampSquareCeiling",
+    "label": "Lamp Square Ceiling",
+    "category": "General"
+  },
+  {
+    "type": "lampSquareFloor",
+    "label": "Lamp Square Floor",
+    "category": "General"
+  },
+  {
+    "type": "lampSquareTable",
+    "label": "Lamp Square Table",
+    "category": "General"
+  },
+  {
+    "type": "lampWall",
+    "label": "Lamp Wall",
+    "category": "General"
+  },
+  {
+    "type": "laptop",
+    "label": "Laptop",
+    "category": "General"
+  },
+  {
+    "type": "loungeChair",
+    "label": "Lounge Chair",
+    "category": "General"
+  },
+  {
+    "type": "loungeChairRelax",
+    "label": "Lounge Chair Relax",
+    "category": "General"
+  },
+  {
+    "type": "loungeDesignChair",
+    "label": "Lounge Design Chair",
+    "category": "General"
+  },
+  {
+    "type": "loungeDesignSofa",
+    "label": "Lounge Design Sofa",
+    "category": "General"
+  },
+  {
+    "type": "loungeDesignSofaCorner",
+    "label": "Lounge Design Sofa Corner",
+    "category": "General"
+  },
+  {
+    "type": "loungeSofa",
+    "label": "Lounge Sofa",
+    "category": "General"
+  },
+  {
+    "type": "loungeSofaCorner",
+    "label": "Lounge Sofa Corner",
+    "category": "General"
+  },
+  {
+    "type": "loungeSofaLong",
+    "label": "Lounge Sofa Long",
+    "category": "General"
+  },
+  {
+    "type": "loungeSofaOttoman",
+    "label": "Lounge Sofa Ottoman",
+    "category": "General"
+  },
+  {
+    "type": "paneling",
+    "label": "Paneling",
+    "category": "General"
+  },
+  {
+    "type": "pillow",
+    "label": "Pillow",
+    "category": "General"
+  },
+  {
+    "type": "pillowBlue",
+    "label": "Pillow Blue",
+    "category": "General"
+  },
+  {
+    "type": "pillowBlueLong",
+    "label": "Pillow Blue Long",
+    "category": "General"
+  },
+  {
+    "type": "pillowLong",
+    "label": "Pillow Long",
+    "category": "General"
+  },
+  {
+    "type": "plantSmall1",
+    "label": "Plant Small1",
+    "category": "General"
+  },
+  {
+    "type": "plantSmall2",
+    "label": "Plant Small2",
+    "category": "General"
+  },
+  {
+    "type": "plantSmall3",
+    "label": "Plant Small3",
+    "category": "General"
+  },
+  {
+    "type": "pottedPlant",
+    "label": "Potted Plant",
+    "category": "General"
+  },
+  {
+    "type": "radio",
+    "label": "Radio",
+    "category": "General"
+  },
+  {
+    "type": "rugDoormat",
+    "label": "Rug Doormat",
+    "category": "General"
+  },
+  {
+    "type": "rugRectangle",
+    "label": "Rug Rectangle",
+    "category": "General"
+  },
+  {
+    "type": "rugRound",
+    "label": "Rug Round",
+    "category": "General"
+  },
+  {
+    "type": "rugRounded",
+    "label": "Rug Rounded",
+    "category": "General"
+  },
+  {
+    "type": "rugSquare",
+    "label": "Rug Square",
+    "category": "General"
+  },
+  {
+    "type": "shower",
+    "label": "Shower",
+    "category": "General"
+  },
+  {
+    "type": "showerRound",
+    "label": "Shower Round",
+    "category": "General"
+  },
+  {
+    "type": "sideTable",
+    "label": "Side Table",
+    "category": "General"
+  },
+  {
+    "type": "sideTableDrawers",
+    "label": "Side Table Drawers",
+    "category": "General"
+  },
+  {
+    "type": "speaker",
+    "label": "Speaker",
+    "category": "General"
+  },
+  {
+    "type": "speakerSmall",
+    "label": "Speaker Small",
+    "category": "General"
+  },
+  {
+    "type": "stairs",
+    "label": "Stairs",
+    "category": "General"
+  },
+  {
+    "type": "stairsCorner",
+    "label": "Stairs Corner",
+    "category": "General"
+  },
+  {
+    "type": "stairsOpen",
+    "label": "Stairs Open",
+    "category": "General"
+  },
+  {
+    "type": "stairsOpenSingle",
+    "label": "Stairs Open Single",
+    "category": "General"
+  },
+  {
+    "type": "stoolBar",
+    "label": "Stool Bar",
+    "category": "General"
+  },
+  {
+    "type": "stoolBarSquare",
+    "label": "Stool Bar Square",
+    "category": "General"
+  },
+  {
+    "type": "table",
+    "label": "Table",
+    "category": "General"
+  },
+  {
+    "type": "tableCloth",
+    "label": "Table Cloth",
+    "category": "General"
+  },
+  {
+    "type": "tableCoffee",
+    "label": "Table Coffee",
+    "category": "General"
+  },
+  {
+    "type": "tableCoffeeGlass",
+    "label": "Table Coffee Glass",
+    "category": "General"
+  },
+  {
+    "type": "tableCoffeeGlassSquare",
+    "label": "Table Coffee Glass Square",
+    "category": "General"
+  },
+  {
+    "type": "tableCoffeeSquare",
+    "label": "Table Coffee Square",
+    "category": "General"
+  },
+  {
+    "type": "tableCross",
+    "label": "Table Cross",
+    "category": "General"
+  },
+  {
+    "type": "tableCrossCloth",
+    "label": "Table Cross Cloth",
+    "category": "General"
+  },
+  {
+    "type": "tableGlass",
+    "label": "Table Glass",
+    "category": "General"
+  },
+  {
+    "type": "tableRound",
+    "label": "Table Round",
+    "category": "General"
+  },
+  {
+    "type": "televisionAntenna",
+    "label": "Television Antenna",
+    "category": "General"
+  },
+  {
+    "type": "televisionModern",
+    "label": "Television Modern",
+    "category": "General"
+  },
+  {
+    "type": "televisionVintage",
+    "label": "Television Vintage",
+    "category": "General"
+  },
+  {
+    "type": "toaster",
+    "label": "Toaster",
+    "category": "General"
+  },
+  {
+    "type": "toilet",
+    "label": "Toilet",
+    "category": "General"
+  },
+  {
+    "type": "toiletSquare",
+    "label": "Toilet Square",
+    "category": "General"
+  },
+  {
+    "type": "trashcan",
+    "label": "Trashcan",
+    "category": "General"
+  },
+  {
+    "type": "wall",
+    "label": "Wall",
+    "category": "General"
+  },
+  {
+    "type": "wallCorner",
+    "label": "Wall Corner",
+    "category": "General"
+  },
+  {
+    "type": "wallCornerRond",
+    "label": "Wall Corner Rond",
+    "category": "General"
+  },
+  {
+    "type": "wallDoorway",
+    "label": "Wall Doorway",
+    "category": "General"
+  },
+  {
+    "type": "wallDoorwayWide",
+    "label": "Wall Doorway Wide",
+    "category": "General"
+  },
+  {
+    "type": "wallHalf",
+    "label": "Wall Half",
+    "category": "General"
+  },
+  {
+    "type": "wallWindow",
+    "label": "Wall Window",
+    "category": "General"
+  },
+  {
+    "type": "wallWindowSlide",
+    "label": "Wall Window Slide",
+    "category": "General"
+  },
+  {
+    "type": "washer",
+    "label": "Washer",
+    "category": "General"
+  },
+  {
+    "type": "washerDryerStacked",
+    "label": "Washer Dryer Stacked",
+    "category": "General"
+  }
+]

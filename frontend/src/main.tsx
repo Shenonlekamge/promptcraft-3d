@@ -2,9 +2,15 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+// 👇 Replace this with the full ID from your Google Console (image_a7c273.png)
+const CLIENT_ID = "1055709139046-n3q4ejpp6lfuhgde97mp1ppjn9b0qo62.apps.googleusercontent.com";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider>
   </StrictMode>,
 )
