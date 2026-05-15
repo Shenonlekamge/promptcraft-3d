@@ -60,9 +60,27 @@ const RoomPanel = ({ data, onUpdateRoom }: RoomPanelProps) => {
       </section>
 
       <section className="space-y-6 pt-6 border-t border-pc-surface">
-        <h3 className="text-sm font-bold text-pc-muted uppercase tracking-widest">Structures & Lighting</h3>
-        
-        <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-bold text-pc-muted uppercase tracking-widest">Architectural Elements</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <button 
+            onClick={() => onUpdateRoom({
+              furniture: [...data.furniture, { id: Math.random().toString(36).substr(2, 9), type: 'door', position: [0, 0, -data.depth / 2], rotation: 0, color: "#ffffff" }]
+            })}
+            className="p-3 bg-pc-surface hover:bg-pc-cyan/20 border border-pc-surface hover:border-pc-cyan/50 text-pc-cyan rounded text-sm font-bold uppercase tracking-wider transition-all"
+          >
+            + Add Door
+          </button>
+          <button 
+            onClick={() => onUpdateRoom({
+              furniture: [...data.furniture, { id: Math.random().toString(36).substr(2, 9), type: 'window', position: [0, data.height / 2, -data.depth / 2], rotation: 0, color: "#ffffff" }]
+            })}
+            className="p-3 bg-pc-surface hover:bg-pc-cyan/20 border border-pc-surface hover:border-pc-cyan/50 text-pc-cyan rounded text-sm font-bold uppercase tracking-wider transition-all"
+          >
+            + Add Window
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between mb-4 mt-6">
           <label className="text-xs font-bold text-pc-muted uppercase tracking-tight">Add Ceiling</label>
           <input 
             type="checkbox" 
@@ -93,25 +111,35 @@ const RoomPanel = ({ data, onUpdateRoom }: RoomPanelProps) => {
             className="w-5 h-5 accent-pc-cyan cursor-pointer" 
           />
         </div>
+      </section>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
+      <section className="space-y-6 pt-6 border-t border-pc-surface">
+        <h3 className="text-sm font-bold text-pc-muted uppercase tracking-widest">Lighting</h3>
+        
+        <div>
+          <label className="block text-xs font-bold text-pc-muted mb-2 uppercase tracking-tight">Time of Day</label>
+          <select 
+            value={data.isNight ? 'night' : 'day'} 
+            onChange={(e) => onUpdateRoom({ isNight: e.target.value === 'night' })} 
+            className="w-full bg-pc-surface border-none text-pc-text p-3 rounded text-base outline-none cursor-pointer"
+          >
+            <option value="day">Day</option>
+            <option value="night">Night</option>
+          </select>
+        </div>
+
+        <div className="flex items-center justify-between mb-6">
+          <label className="text-xs font-bold text-pc-muted uppercase tracking-tight">Indoor Lights</label>
           <button 
             onClick={() => onUpdateRoom({
-              furniture: [...data.furniture, { id: Math.random().toString(36).substr(2, 9), type: 'door', position: [0, 0, -data.depth / 2], rotation: 0, color: "#ffffff" }]
+              furniture: [...data.furniture, { id: Math.random().toString(36).substr(2, 9), type: 'light', position: [0, data.height - 0.2, 0], rotation: 0, color: "#ffffff" }]
             })}
-            className="p-3 bg-pc-surface hover:bg-pc-surface/80 rounded text-sm font-bold uppercase tracking-wider text-pc-text transition-colors"
+            className="p-2 px-4 bg-pc-surface hover:bg-yellow-500/20 border border-pc-surface hover:border-yellow-500/50 text-yellow-500 rounded text-xs font-bold uppercase tracking-wider transition-all"
           >
-            + Add Door
-          </button>
-          <button 
-            onClick={() => onUpdateRoom({
-              furniture: [...data.furniture, { id: Math.random().toString(36).substr(2, 9), type: 'window', position: [0, data.height / 2, -data.depth / 2], rotation: 0, color: "#ffffff" }]
-            })}
-            className="p-3 bg-pc-surface hover:bg-pc-surface/80 rounded text-sm font-bold uppercase tracking-wider text-pc-text transition-colors"
-          >
-            + Add Window
+            + Add Light Bulb
           </button>
         </div>
+
 
         <div>
           <label className="block text-xs font-bold text-pc-muted mb-2 uppercase tracking-tight">Sun / Light Position (X, Y, Z)</label>

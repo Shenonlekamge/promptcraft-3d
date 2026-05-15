@@ -6,13 +6,18 @@ from .database import user_collection
 import datetime
 import hashlib
 import secrets
-from typing import Optional
+from typing import Optional, List
+import json
+import os
+import uuid
+from openai import AsyncOpenAI
+from dotenv import load_dotenv
+from pydantic import Field
 
+load_dotenv()
+aclient = AsyncOpenAI()
 app = FastAPI(title="PromptCraft 3D API")
 
-# ---------------------------------------------------------------------------
-# 1. CORS Configuration
-# ---------------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -26,30 +31,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# 2. Helpers
-# ---------------------------------------------------------------------------
-
 def hash_password(password: str) -> str:
-    """SHA-256 hash a password with a random salt."""
     salt = secrets.token_hex(16)
     hashed = hashlib.sha256((salt + password).encode()).hexdigest()
     return f"{salt}:{hashed}"
 
-
 def verify_password(password: str, stored: str) -> bool:
-    """Verify a plain password against a stored salt:hash string.
-    Falls back to plain-text comparison for legacy entries."""
     if ":" in stored:
         salt, hashed = stored.split(":", 1)
         return hashlib.sha256((salt + password).encode()).hexdigest() == hashed
-    # Legacy plain-text fallback (for accounts created before this fix)
     return password == stored
-
-
-# ---------------------------------------------------------------------------
-# 3. Pydantic Models (Request Schemas)
-# ---------------------------------------------------------------------------
 
 class UserRegister(BaseModel):
     full_name: str
@@ -62,29 +53,20 @@ class UserLogin(BaseModel):
 
 class GenerationRequest(BaseModel):
     prompt: str
-    room_dimensions: Optional[dict] = {"width": 12, "depth": 12}
-
-# ---------------------------------------------------------------------------
-# 4. Health Check
-# ---------------------------------------------------------------------------
+    room_dimensions: Optional[dict] = Field(default_factory=lambda: {"width": 12, "depth": 12})
+    available_assets: Optional[List[str]] = Field(default_factory=list)
 
 @app.get("/health")
 async def health_check():
     return {"status": "ok", "timestamp": datetime.datetime.utcnow().isoformat()}
 
-# ---------------------------------------------------------------------------
-# 5. Authentication Routes
-# ---------------------------------------------------------------------------
-
 @app.post("/auth/register")
 async def register_user(user: UserRegister):
-    # Validate password length
     if len(user.password) < 6:
         raise HTTPException(
             status_code=400, detail="Password must be at least 6 characters"
         )
 
-    # Check if email is already taken
     existing_user = await user_collection.find_one({"email": user.email})
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -92,14 +74,13 @@ async def register_user(user: UserRegister):
     user_doc = {
         "full_name": user.full_name,
         "email": user.email,
-        "password": hash_password(user.password),   # stored hashed
+        "password": hash_password(user.password),
         "method": "manual",
         "created_at": datetime.datetime.utcnow().isoformat(),
     }
 
     await user_collection.insert_one(user_doc)
     return {"message": "Registration successful! Please log in."}
-
 
 @app.post("/auth/login")
 async def login_user(user: UserLogin):
@@ -116,7 +97,6 @@ async def login_user(user: UserLogin):
             "picture": db_user.get("picture"),
         },
     }
-
 
 @app.post("/auth/google")
 async def google_auth(payload: dict = Body(...)):
@@ -144,13 +124,62 @@ async def google_auth(payload: dict = Body(...)):
 
     return {"message": "Login successful", "user": user_info}
 
-
-# ---------------------------------------------------------------------------
-# 6. Core App Routes
-# ---------------------------------------------------------------------------
-
 @app.post("/generate-layout")
 async def generate_layout(request: GenerationRequest):
-    print(f"AI Prompt received: {request.prompt}")
-    # TODO: replace with real AI generation logic
-    return {"layout": []}
+    if not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") == "your_openai_api_key_here":
+        raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+        
+    system_prompt = f"""You are a 3D room layout generator.
+Given a user prompt for a room layout, you must determine the room type, suggested dimensions, and an array of furniture items.
+CRITICAL INSTRUCTION: You are ONLY allowed to use the following exact strings for the "type" field:
+{', '.join(request.available_assets) if request.available_assets else 'any'}
+DO NOT use any asset type that is not in this exact list. If you need a bed and only 'bedDouble' is available, you MUST use 'bedDouble'.
+
+Coordinate system:
+- Room center is (0, 0, 0)
+- Width is X axis, Depth is Z axis.
+- Y is always 0 for furniture on the floor.
+- Rotation is Y-axis in degrees (0, 90, 180, 270). 0 faces +Z (camera).
+- Furniture positions should be within the room dimensions width x depth, avoid overlapping.
+- Please place a RICH, DETAILED layout. DO NOT just place a few items. A standard room should have 6 to 12 items.
+- If generating a bedroom, it MUST include at least: a bed, a bedside cabinet (or nightstand), a table/desk, a chair, an almirah/cupboard, and a mirror (assuming they exist in the assets list).
+- Ensure all items are logically placed (e.g., bed against a wall, chair facing the table, mirror on a wall) and have CORRECT Y-axis rotations so they face the right directions.
+- If placing a television, ALWAYS place a 'cabinetTelevision' (or similar cabinet) first, and place the 'television' exactly on top of it by setting the television's Y position to something like 0.6. Do NOT place televisions directly on the floor (Y=0).
+- Use variety. Fill the space logically without cluttering it.
+
+Respond in JSON format ONLY:
+{{
+  "roomType": "bedroom",
+  "roomUpdates": {{
+    "width": 12,
+    "depth": 12,
+    "height": 3,
+    "floorColor": "#8B7355",
+    "wallColor": "#F5F0E8"
+  }},
+  "furniture": [
+    {{ "type": "bedDouble", "position": [0, 0, -3.5], "rotation": 0 }}
+  ]
+}}
+"""
+
+    try:
+        response = await aclient.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": request.prompt}
+            ],
+            response_format={ "type": "json_object" }
+        )
+        content = response.choices[0].message.content
+        result = json.loads(content or "{}")
+        
+        for item in result.get("furniture", []):
+            if "id" not in item:
+                item["id"] = str(uuid.uuid4())[:8]
+            if "color" not in item:
+                item["color"] = "#3895D3"
+        return result
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to generate layout")

@@ -6,8 +6,8 @@ interface ToolbarPanelProps {
   onSelectItem: (id: string | null) => void;
   onDeleteItem: (id: string) => void;
   onMoveItem: (id: string, direction: 'forward' | 'back' | 'left' | 'right') => void;
-  activeTool: 'translate' | 'rotate';
-  onSetTool: (tool: 'translate' | 'rotate') => void;
+  activeTool: 'translate' | 'rotate' | 'tour';
+  onSetTool: (tool: 'translate' | 'rotate' | 'tour') => void;
 }
 
 const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem, activeTool, onSetTool }: ToolbarPanelProps) => {
@@ -15,7 +15,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
-      {/* Tools Section */}
       <section>
         <h3 className="text-sm font-bold text-pc-muted uppercase mb-4 tracking-widest">Transform Tools</h3>
         <div className="grid grid-cols-2 gap-3">
@@ -52,14 +51,27 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
             </svg>
             <span className="text-xs font-bold uppercase tracking-wide">Rotate</span>
           </button>
-        </div>
 
-        {/* Directional Movement Pad - visible when Move tool is active */}
+          <button
+            onClick={() => onSetTool('tour')}
+            className={`col-span-2 flex items-center justify-center gap-3 p-4 rounded-lg border transition-all ${
+              activeTool === 'tour'
+                ? 'bg-green-500/15 border-green-500 text-green-400 shadow-lg shadow-green-500/10'
+                : 'bg-pc-surface border-transparent text-pc-muted hover:text-pc-text hover:border-pc-surface'
+            }`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path d="M2 12c0 4.4 3.6 8 8 8h4c4.4 0 8-3.6 8-8s-3.6-8-8-8H10C5.6 4 2 7.6 2 12Z" />
+              <path d="M12 12v.01" />
+            </svg>
+            <span className="text-sm font-bold uppercase tracking-wide">Tour Mode</span>
+          </button>
+        </div>
         {activeTool === 'translate' && selectedId && (
           <div className="mt-5">
             <p className="text-xs text-pc-muted uppercase tracking-wider mb-3 font-bold">Nudge Selected</p>
             <div className="flex flex-col items-center gap-1">
-              {/* Forward */}
               <button
                 onClick={() => onMoveItem(selectedId, 'forward')}
                 className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
@@ -71,7 +83,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
               </button>
 
               <div className="flex gap-1">
-                {/* Left */}
                 <button
                   onClick={() => onMoveItem(selectedId, 'left')}
                   className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
@@ -81,13 +92,9 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </button>
-
-                {/* Center indicator */}
                 <div className="w-12 h-10 bg-pc-surface/50 rounded-lg flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-pc-cyan/50" />
                 </div>
-
-                {/* Right */}
                 <button
                   onClick={() => onMoveItem(selectedId, 'right')}
                   className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
@@ -98,8 +105,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
                   </svg>
                 </button>
               </div>
-
-              {/* Back */}
               <button
                 onClick={() => onMoveItem(selectedId, 'back')}
                 className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
@@ -114,8 +119,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
           </div>
         )}
       </section>
-
-      {/* Actions Section */}
       <section className="pt-4 border-t border-pc-surface">
         <h3 className="text-sm font-bold text-pc-muted uppercase mb-4 tracking-widest">Actions</h3>
         <button
@@ -136,8 +139,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
           Delete Selected
         </button>
       </section>
-
-      {/* Placed Assets List */}
       <section className="pt-4 border-t border-pc-surface">
         <h3 className="text-sm font-bold text-pc-muted uppercase mb-4 tracking-widest">
           Placed Assets ({data.furniture.length})
@@ -190,8 +191,6 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
           </div>
         )}
       </section>
-
-      {/* Selection Info */}
       {selectedItem && (
         <section className="pt-4 border-t border-pc-surface">
           <h3 className="text-sm font-bold text-pc-muted uppercase mb-3 tracking-widest">Selected</h3>

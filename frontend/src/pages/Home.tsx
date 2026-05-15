@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import PromptPanel from "../components/PromptPanel";
 import PreviewPanel from "../components/PreviewPanel";
-import { generateLayout, getSupportedRoomTypes } from "../components/layoutGenerator";
+import { getSupportedRoomTypes } from "../components/layoutGenerator";
+import { GLTFExporter } from 'three-stdlib';
+import * as THREE from 'three';
 
 export type RoomData = {
   width: number; depth: number; height: number;
@@ -13,13 +15,15 @@ export type RoomData = {
   hasCeiling?: boolean;
   ceilingColor?: string;
   hasSecondStory?: boolean;
+  isNight?: boolean;
+  indoorLightOn?: boolean;
 };
 
 const Home = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [activeTool, setActiveTool] = useState<'translate' | 'rotate'>('translate');
+  const [activeTool, setActiveTool] = useState<'translate' | 'rotate' | 'tour'>('translate');
   const [activeFloor, setActiveFloor] = useState<1 | 2>(1);
   const manifestRef = useRef<string[]>([]);
   const [sceneData, setSceneData] = useState<RoomData>({
@@ -30,10 +34,12 @@ const Home = () => {
     sunPosition: [10, 15, 10],
     hasCeiling: false,
     ceilingColor: "#ffffff",
-    hasSecondStory: false
+    hasSecondStory: false,
+    isNight: false,
+    indoorLightOn: true
   });
+  const sceneRef = useRef<THREE.Scene | null>(null);
 
-  // Fetch manifest once on mount
   useEffect(() => {
     fetch('/models/manifest.json')
       .then(res => res.json())
@@ -47,35 +53,7 @@ const Home = () => {
     setSceneData((prev) => ({ ...prev, ...updates }));
   };
 
-  // --- AI BACKEND HANDLER ---
-  // This handles instructions like: { action: 'REPLACE', targetId: '123', newType: 'bedDouble' }
-  const handleAIUpdate = (instructions: any[]) => {
-    setSceneData((prev) => {
-      let currentFurniture = [...prev.furniture];
 
-      instructions.forEach(instr => {
-        if (instr.action === 'ADD') {
-          currentFurniture.push({
-            id: Math.random().toString(36).substr(2, 9),
-            type: instr.type,
-            position: instr.position || [0, 0, 0],
-            rotation: instr.rotation || 0,
-            color: "#3895D3"
-          });
-        }
-        if (instr.action === 'REPLACE') {
-          currentFurniture = currentFurniture.map(item =>
-            item.id === instr.targetId ? { ...item, type: instr.newType } : item
-          );
-        }
-        if (instr.action === 'REMOVE') {
-          currentFurniture = currentFurniture.filter(item => item.id !== instr.targetId);
-        }
-      });
-
-      return { ...prev, furniture: currentFurniture };
-    });
-  };
 
   const handleAddFurniture = (type: string, color: string) => {
     setSceneData((prev) => ({
@@ -103,7 +81,9 @@ const Home = () => {
       const item = prev.furniture.find(f => f.id === id);
       if (!item) return prev;
 
-      let [x, y, z] = item.position;
+      let x = item.position[0];
+      const y = item.position[1];
+      let z = item.position[2];
       const buffer = 0.8;
 
       if (direction === 'forward') z = Math.max(-(prev.depth / 2) + buffer, z - step);
@@ -132,39 +112,119 @@ const Home = () => {
     }));
   };
 
+  const handleExport = (format: 'json' | 'jpg' | 'gltf') => {
+    if (format === 'json') {
+      const dataStr = JSON.stringify(sceneData, null, 2);
+      const blob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "promptcraft_room_export.json";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else if (format === 'jpg') {
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "promptcraft_room_export.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } else if (format === 'gltf') {
+      if (sceneRef.current) {
+        const exporter = new GLTFExporter();
+        exporter.parse(
+          sceneRef.current,
+          (gltf) => {
+            const dataStr = JSON.stringify(gltf, null, 2);
+            const blob = new Blob([dataStr], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "promptcraft_room_export.gltf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          },
+          (error) => {
+            console.error('An error happened during GLTF export:', error);
+            alert("Error exporting 3D model.");
+          },
+          { binary: false }
+        );
+      } else {
+        alert("3D scene not ready for export yet.");
+      }
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col bg-pc-bg text-pc-text font-sans">
-      <Navbar />
+      <Navbar onExport={handleExport} />
       <div className="flex flex-1 overflow-hidden">
         <div className="w-1/3 border-r border-pc-surface bg-pc-bg flex flex-col">
           <PromptPanel
             data={sceneData}
-            onGenerate={(text) => {
+            onGenerate={async (text) => {
               setIsGenerating(true);
               setGenerationError(null);
 
-              // Simulate a brief loading feel
-              setTimeout(() => {
-                const result = generateLayout(text, sceneData, manifestRef.current);
+              try {
+                const response = await fetch("http://127.0.0.1:8000/generate-layout", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    prompt: text,
+                    room_dimensions: { width: sceneData.width, depth: sceneData.depth },
+                    available_assets: manifestRef.current
+                  })
+                });
 
-                if (!result) {
-                  const supported = getSupportedRoomTypes();
-                  setGenerationError(
-                    `Could not understand that prompt. Try something like:\n• "bedroom"\n• "12x14 kitchen"\n• "modern living room"\n\nSupported: ${supported.join(', ')}`
-                  );
-                  setIsGenerating(false);
-                  return;
+                if (!response.ok) {
+                  const errorData = await response.json().catch(() => ({ detail: response.statusText }));
+                  throw new Error(errorData.detail || "Failed to generate layout");
                 }
 
-                // Apply the generated layout
+                const result = await response.json();
+
+                if (!result || !result.furniture) {
+                  throw new Error("Invalid response format");
+                }
+
+                const validFurniture = result.furniture
+                  .filter((item: { type: string }) => {
+                    if (item.type === 'door' || item.type === 'window') return true;
+                    return manifestRef.current.length === 0 || manifestRef.current.includes(item.type);
+                  })
+                  .map((item: { id?: string, type: string, position?: number[], rotation?: number, color?: string }) => ({
+                    id: item.id || Math.random().toString(36).substr(2, 9),
+                    type: item.type,
+                    position: Array.isArray(item.position) && item.position.length === 3 ? item.position : [0, 0, 0],
+                    rotation: typeof item.rotation === 'number' ? item.rotation : 0,
+                    color: item.color || "#3895D3"
+                  }));
+
                 setSceneData((prev) => ({
                   ...prev,
                   ...result.roomUpdates,
-                  furniture: result.furniture,
+                  furniture: validFurniture,
                 }));
                 setSelectedId(null);
+              } catch (err: unknown) {
+                const error = err as Error;
+                const supported = getSupportedRoomTypes();
+                setGenerationError(
+                  `Could not generate layout: ${error.message}\nTry something like:\n• "bedroom"\n• "12x14 kitchen"\n\nSupported: ${supported.join(', ')}`
+                );
+              } finally {
                 setIsGenerating(false);
-              }, 1200);
+              }
             }}
             isGenerating={isGenerating}
             onAddFurniture={handleAddFurniture}
@@ -186,11 +246,13 @@ const Home = () => {
             onSelectItem={setSelectedId}
             activeTool={activeTool}
             activeFloor={activeFloor}
+            sceneRef={sceneRef}
+            onSetTool={setActiveTool}
           />
         </div>
       </div>
 
-      {/* Floor selector overlay if second story exists */}
+
       {sceneData.hasSecondStory && (
         <div className="absolute top-24 right-8 bg-slate-900 border border-slate-700 rounded-lg p-2 flex flex-col gap-2 z-50 shadow-xl">
           <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center mb-1">Floor</div>

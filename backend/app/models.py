@@ -10,7 +10,7 @@ class User(BaseModel):
 class FurnitureItem(BaseModel):
     id: str
     type: str
-    position: List[float] # [x, y, z]
+    position: List[float] 
 
 class RoomLayout(BaseModel):
     user_id: str

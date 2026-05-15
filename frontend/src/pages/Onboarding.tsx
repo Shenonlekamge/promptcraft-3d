@@ -1,11 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
 
 const Onboarding: React.FC = () => {
-  const navigate = useNavigate();
 
-  const handleSelect = (purpose: string) => {
-    // Optionally, store the purpose in the database or session
+
+  const handleSelect = () => {
     sessionStorage.setItem("onboardingComplete", "true");
     window.location.assign('/builder');
   };
@@ -39,7 +38,6 @@ const Onboarding: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center p-6 text-white font-sans overflow-hidden relative">
-      {/* Background glow */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
@@ -55,7 +53,7 @@ const Onboarding: React.FC = () => {
           {options.map((option, index) => (
             <div 
               key={option.id}
-              onClick={() => handleSelect(option.title)}
+              onClick={handleSelect}
               className="group relative rounded-3xl overflow-hidden cursor-pointer border border-slate-800 bg-slate-900/50 hover:border-blue-500 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -82,7 +80,7 @@ const Onboarding: React.FC = () => {
         
         <div className="mt-12 text-center">
           <button 
-            onClick={() => handleSelect('Other')}
+            onClick={handleSelect}
             className="text-slate-500 hover:text-white transition-colors underline underline-offset-4"
           >
             Skip for now, I just want to explore

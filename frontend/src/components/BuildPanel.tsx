@@ -18,8 +18,6 @@ const BuildPanel = ({ onGenerate, isGenerating, generationError }: BuildPanelPro
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
       />
-
-      {/* Quick prompt chips */}
       <div className="flex flex-wrap gap-2 mb-6">
         {['bedroom', 'living room', 'kitchen', 'office', 'bathroom', 'dining room'].map((chip) => (
           <button
@@ -43,8 +41,6 @@ const BuildPanel = ({ onGenerate, isGenerating, generationError }: BuildPanelPro
       >
         {isGenerating ? "CONSTRUCTING..." : "GENERATE LAYOUT"}
       </button>
-
-      {/* Error message */}
       {generationError && (
         <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-400 whitespace-pre-line">
           {generationError}

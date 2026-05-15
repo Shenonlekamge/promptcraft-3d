@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
@@ -6,9 +6,8 @@ import Home from './pages/Home';
 import Onboarding from './pages/Onboarding';
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!sessionStorage.getItem("user"));
+  const [isAuthenticated] = useState<boolean>(!!sessionStorage.getItem("user"));
 
-  // Check inline so it evaluates on render
   const checkOnboarded = () => !!sessionStorage.getItem("onboardingComplete");
 
   return (

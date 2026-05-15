@@ -8,8 +8,8 @@ const AuthPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleGoogleSuccess = async (credentialResponse: any) => {
-    const response = await fetch("http://localhost:8000/auth/google", {
+  const handleGoogleSuccess = async (credentialResponse: { credential?: string }) => {
+    const response = await fetch("http://127.0.0.1:8000/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: credentialResponse.credential }),
@@ -23,12 +23,11 @@ const AuthPage: React.FC = () => {
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(""); // Clear previous messages
+    setMessage(""); 
 
     if (!isLogin) {
-      // --- REGISTRATION FLOW ---
       try {
-        const response = await fetch("http://localhost:8000/auth/register", {
+        const response = await fetch("http://127.0.0.1:8000/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password, full_name: fullName }),
@@ -37,17 +36,16 @@ const AuthPage: React.FC = () => {
 
         if (response.ok) {
           alert("Account created! Now please log in.");
-          setIsLogin(true); // 👈 THIS switches the UI to the Login screen
+          setIsLogin(true); 
         } else {
           setMessage(data.detail || "Registration failed");
         }
-      } catch (err) {
+      } catch {
         setMessage("Server connection error");
       }
     } else {
-      // --- LOGIN FLOW ---
       try {
-        const response = await fetch("http://localhost:8000/auth/login", {
+        const response = await fetch("http://127.0.0.1:8000/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -56,11 +54,11 @@ const AuthPage: React.FC = () => {
 
         if (response.ok) {
           sessionStorage.setItem("user", JSON.stringify(data.user));
-          window.location.href = "/onboarding"; // 👈 Redirect only after successful login
+          window.location.href = "/onboarding"; 
         } else {
           setMessage(data.detail || "Invalid credentials");
         }
-      } catch (err) {
+      } catch {
         setMessage("Server connection error");
       }
     }

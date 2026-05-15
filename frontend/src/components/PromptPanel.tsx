@@ -15,8 +15,8 @@ interface PromptPanelProps {
   onSelectItem: (id: string | null) => void;
   onDeleteItem: (id: string) => void;
   onMoveItem: (id: string, direction: 'forward' | 'back' | 'left' | 'right') => void;
-  activeTool: 'translate' | 'rotate';
-  onSetTool: (tool: 'translate' | 'rotate') => void;
+  activeTool: 'translate' | 'rotate' | 'tour';
+  onSetTool: (tool: 'translate' | 'rotate' | 'tour') => void;
   generationError: string | null;
 }
 
@@ -25,7 +25,6 @@ const PromptPanel = ({ data, onGenerate, isGenerating, onAddFurniture, onUpdateR
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Tab Navigation - Increased Font Size */}
       <div className="flex border-b border-pc-surface text-sm font-bold uppercase tracking-wider bg-pc-bg/50 backdrop-blur-sm sticky top-0 z-10">
         {(['build', 'room', 'furnish', 'toolbar'] as const).map((tab) => (
           <button 
