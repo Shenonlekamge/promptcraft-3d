@@ -6,11 +6,13 @@ interface ToolbarPanelProps {
   onSelectItem: (id: string | null) => void;
   onDeleteItem: (id: string) => void;
   onMoveItem: (id: string, direction: 'forward' | 'back' | 'left' | 'right') => void;
+  onRotateItem: (id: string, deltaDeg: number) => void;
+  onScaleItem: (id: string, delta: number) => void;
   activeTool: 'translate' | 'rotate' | 'tour';
   onSetTool: (tool: 'translate' | 'rotate' | 'tour') => void;
 }
 
-const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem, activeTool, onSetTool }: ToolbarPanelProps) => {
+const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem, onRotateItem, onScaleItem, activeTool, onSetTool }: ToolbarPanelProps) => {
   const selectedItem = data.furniture.find(f => f.id === selectedId);
 
   return (
@@ -72,50 +74,76 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
           <div className="mt-5">
             <p className="text-xs text-pc-muted uppercase tracking-wider mb-3 font-bold">Nudge Selected</p>
             <div className="flex flex-col items-center gap-1">
-              <button
-                onClick={() => onMoveItem(selectedId, 'forward')}
-                className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
-                title="Move Forward (−Z)"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="18 15 12 9 6 15" />
-                </svg>
+              <button onClick={() => onMoveItem(selectedId, 'forward')} className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center" title="Move Forward">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15" /></svg>
               </button>
-
               <div className="flex gap-1">
-                <button
-                  onClick={() => onMoveItem(selectedId, 'left')}
-                  className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
-                  title="Move Left (−X)"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
+                <button onClick={() => onMoveItem(selectedId, 'left')} className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center" title="Move Left">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
                 </button>
                 <div className="w-12 h-10 bg-pc-surface/50 rounded-lg flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-pc-cyan/50" />
                 </div>
-                <button
-                  onClick={() => onMoveItem(selectedId, 'right')}
-                  className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
-                  title="Move Right (+X)"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
+                <button onClick={() => onMoveItem(selectedId, 'right')} className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center" title="Move Right">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                 </button>
               </div>
-              <button
-                onClick={() => onMoveItem(selectedId, 'back')}
-                className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center"
-                title="Move Back (+Z)"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
+              <button onClick={() => onMoveItem(selectedId, 'back')} className="w-12 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center" title="Move Back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
               </button>
             </div>
             <p className="text-[10px] text-pc-muted/50 text-center mt-2 font-mono">0.5m per step</p>
+          </div>
+        )}
+
+        {/* Rotation step buttons — shown when rotate tool is active and item selected */}
+        {activeTool === 'rotate' && selectedId && (
+          <div className="mt-5">
+            <p className="text-xs text-pc-muted uppercase tracking-wider mb-3 font-bold">Rotate Selected</p>
+            <div className="grid grid-cols-3 gap-2">
+              {([-90, -45, -15, 15, 45, 90] as const).map((deg) => (
+                <button
+                  key={deg}
+                  onClick={() => onRotateItem(selectedId, deg)}
+                  className="h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all text-xs font-bold"
+                  title={`Rotate ${deg > 0 ? '+' : ''}${deg}°`}
+                >
+                  {deg > 0 ? '+' : ''}{deg}°
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-pc-muted/50 text-center mt-2 font-mono">
+              Current: {data.furniture.find(f => f.id === selectedId)?.rotation ?? 0}°
+            </p>
+          </div>
+        )}
+
+        {/* Scale controls — always visible when any item is selected */}
+        {selectedId && (
+          <div className="mt-5 pt-4 border-t border-pc-surface">
+            <p className="text-xs text-pc-muted uppercase tracking-wider mb-3 font-bold">Scale</p>
+            <div className="flex items-center gap-3">
+              <button
+                id="scale-decrease"
+                onClick={() => onScaleItem(selectedId, -0.1)}
+                title="Shrink (−10%)"
+                className="flex-1 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center text-xl font-bold"
+              >
+                −
+              </button>
+              <span className="text-sm font-mono text-pc-text tabular-nums w-16 text-center">
+                {((data.furniture.find(f => f.id === selectedId)?.scale ?? 1) * 100).toFixed(0)}%
+              </span>
+              <button
+                id="scale-increase"
+                onClick={() => onScaleItem(selectedId, 0.1)}
+                title="Grow (+10%)"
+                className="flex-1 h-10 bg-pc-surface hover:bg-pc-cyan/20 hover:text-pc-cyan text-pc-muted rounded-lg border border-transparent hover:border-pc-cyan/40 transition-all flex items-center justify-center text-xl font-bold"
+              >
+                +
+              </button>
+            </div>
+            <p className="text-[10px] text-pc-muted/50 text-center mt-2 font-mono">20% – 500% range</p>
           </div>
         )}
       </section>
@@ -208,6 +236,10 @@ const ToolbarPanel = ({ data, selectedId, onSelectItem, onDeleteItem, onMoveItem
             <div className="flex justify-between text-sm">
               <span className="text-pc-muted">Rotation</span>
               <span className="font-mono text-xs">{selectedItem.rotation || 0}°</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-pc-muted">Scale</span>
+              <span className="font-mono text-xs">{((selectedItem.scale ?? 1) * 100).toFixed(0)}%</span>
             </div>
             <div className="flex justify-between text-sm items-center">
               <span className="text-pc-muted">Color</span>

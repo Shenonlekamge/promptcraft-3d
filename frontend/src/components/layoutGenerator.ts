@@ -254,6 +254,7 @@ export function generateLayout(
       ],
       rotation: item.rotation,
       color: '#3895D3',
+      scale: 2.0,
     });
   }
 

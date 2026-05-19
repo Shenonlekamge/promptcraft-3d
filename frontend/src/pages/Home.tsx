@@ -10,7 +10,7 @@ export type RoomData = {
   width: number; depth: number; height: number;
   floorColor: string; wallColor: string;
   floorTexture: string; wallTexture: string;
-  furniture: { id: string; type: string; position: [number, number, number]; rotation: number; color: string; }[];
+  furniture: { id: string; type: string; position: [number, number, number]; rotation: number; color: string; scale?: number; }[];
   sunPosition?: [number, number, number];
   hasCeiling?: boolean;
   ceilingColor?: string;
@@ -75,6 +75,15 @@ const Home = () => {
     }
   };
 
+  const handleRotateItem = (id: string, deltaDeg: number) => {
+    setSceneData((prev) => ({
+      ...prev,
+      furniture: prev.furniture.map((f) =>
+        f.id === id ? { ...f, rotation: (f.rotation || 0) + deltaDeg } : f
+      )
+    }));
+  };
+
   const handleMoveItem = (id: string, direction: 'forward' | 'back' | 'left' | 'right') => {
     const step = 0.5;
     setSceneData((prev) => {
@@ -109,6 +118,25 @@ const Home = () => {
     setSceneData((prev) => ({
       ...prev,
       furniture: prev.furniture.map((f) => (f.id === id ? { ...f, position: newPosition } : f))
+    }));
+  };
+
+  const handleUpdateRotation = (id: string, rotationDeg: number) => {
+    setSceneData((prev) => ({
+      ...prev,
+      furniture: prev.furniture.map((f) => (f.id === id ? { ...f, rotation: rotationDeg } : f))
+    }));
+  };
+
+  const handleScaleItem = (id: string, delta: number) => {
+    setSceneData((prev) => ({
+      ...prev,
+      furniture: prev.furniture.map((f) => {
+        if (f.id !== id) return f;
+        const current = f.scale ?? 1;
+        const next = Math.max(0.2, Math.min(5, current + delta));
+        return { ...f, scale: parseFloat(next.toFixed(2)) };
+      })
     }));
   };
 
@@ -202,12 +230,13 @@ const Home = () => {
                     if (item.type === 'door' || item.type === 'window') return true;
                     return manifestRef.current.length === 0 || manifestRef.current.includes(item.type);
                   })
-                  .map((item: { id?: string, type: string, position?: number[], rotation?: number, color?: string }) => ({
+                  .map((item: { id?: string, type: string, position?: number[], rotation?: number, color?: string, scale?: number }) => ({
                     id: item.id || Math.random().toString(36).substr(2, 9),
                     type: item.type,
                     position: Array.isArray(item.position) && item.position.length === 3 ? item.position : [0, 0, 0],
                     rotation: typeof item.rotation === 'number' ? item.rotation : 0,
-                    color: item.color || "#3895D3"
+                    color: item.color || "#3895D3",
+                    scale: typeof item.scale === 'number' ? item.scale : 2.0
                   }));
 
                 setSceneData((prev) => ({
@@ -233,6 +262,8 @@ const Home = () => {
             onSelectItem={setSelectedId}
             onDeleteItem={handleDeleteFurniture}
             onMoveItem={handleMoveItem}
+            onRotateItem={handleRotateItem}
+            onScaleItem={handleScaleItem}
             activeTool={activeTool}
             onSetTool={setActiveTool}
             generationError={generationError}
@@ -242,6 +273,7 @@ const Home = () => {
           <PreviewPanel
             data={sceneData}
             onUpdatePosition={handleUpdatePosition}
+            onUpdateRotation={handleUpdateRotation}
             selectedId={selectedId}
             onSelectItem={setSelectedId}
             activeTool={activeTool}

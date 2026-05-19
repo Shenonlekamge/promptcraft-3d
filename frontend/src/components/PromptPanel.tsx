@@ -15,12 +15,14 @@ interface PromptPanelProps {
   onSelectItem: (id: string | null) => void;
   onDeleteItem: (id: string) => void;
   onMoveItem: (id: string, direction: 'forward' | 'back' | 'left' | 'right') => void;
+  onRotateItem: (id: string, deltaDeg: number) => void;
+  onScaleItem: (id: string, delta: number) => void;
   activeTool: 'translate' | 'rotate' | 'tour';
   onSetTool: (tool: 'translate' | 'rotate' | 'tour') => void;
   generationError: string | null;
 }
 
-const PromptPanel = ({ data, onGenerate, isGenerating, onAddFurniture, onUpdateRoom, selectedId, onSelectItem, onDeleteItem, onMoveItem, activeTool, onSetTool, generationError }: PromptPanelProps) => {
+const PromptPanel = ({ data, onGenerate, isGenerating, onAddFurniture, onUpdateRoom, selectedId, onSelectItem, onDeleteItem, onMoveItem, onRotateItem, onScaleItem, activeTool, onSetTool, generationError }: PromptPanelProps) => {
   const [activeTab, setActiveTab] = useState<'build' | 'room' | 'furnish' | 'toolbar'>('build');
 
   return (
@@ -61,6 +63,8 @@ const PromptPanel = ({ data, onGenerate, isGenerating, onAddFurniture, onUpdateR
             onSelectItem={onSelectItem}
             onDeleteItem={onDeleteItem}
             onMoveItem={onMoveItem}
+            onRotateItem={onRotateItem}
+            onScaleItem={onScaleItem}
             activeTool={activeTool}
             onSetTool={onSetTool}
           />

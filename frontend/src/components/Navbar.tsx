@@ -30,7 +30,7 @@ const Navbar = ({ onExport }: NavbarProps) => {
       <h1 className="text-xl font-bold text-pc-cyan">PromptCraft 3D</h1>
       {onExport && (
         <div className="relative" ref={dropdownRef}>
-          <button 
+          <button
             onClick={() => setIsOpen(!isOpen)}
             className="bg-pc-surface hover:bg-pc-surface/80 border border-pc-surface text-pc-text px-4 py-2 rounded-lg text-sm font-bold tracking-wide transition-colors flex items-center gap-2"
           >
@@ -41,22 +41,22 @@ const Navbar = ({ onExport }: NavbarProps) => {
             </svg>
             Export Room
           </button>
-          
+
           {isOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-pc-surface border border-slate-700/50 rounded-lg shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-              <button 
+              <button
                 onClick={() => handleExport('gltf')}
                 className="w-full text-left px-4 py-3 hover:bg-pc-cyan/10 hover:text-pc-cyan text-pc-text text-sm font-semibold transition-colors flex items-center gap-2"
               >
                 3D Model (.gltf)
               </button>
-              <button 
+              <button
                 onClick={() => handleExport('json')}
                 className="w-full text-left px-4 py-3 hover:bg-pc-cyan/10 hover:text-pc-cyan text-pc-text text-sm font-semibold transition-colors border-t border-slate-700/30 flex items-center gap-2"
               >
                 Layout Data (.json)
               </button>
-              <button 
+              <button
                 onClick={() => handleExport('jpg')}
                 className="w-full text-left px-4 py-3 hover:bg-pc-cyan/10 hover:text-pc-cyan text-pc-text text-sm font-semibold transition-colors border-t border-slate-700/30 flex items-center gap-2"
               >
