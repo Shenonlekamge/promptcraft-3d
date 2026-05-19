@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Grid, Environment, TransformControls, PointerLockControls } from '@react-three/drei';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { RoomData } from '../pages/Home'; 
 import FurnitureModel from './FurnitureModel'; 
 import { Geometry, Base, Subtraction } from '@react-three/csg';
@@ -199,8 +199,8 @@ const PreviewPanel = ({ data, onUpdatePosition, onUpdateRotation: _onUpdateRotat
               if (isSelected) {
                 return (
                   <TransformControls 
-                    key={item.id} mode={activeTool} position={item.position}
-                    onMouseUp={(e: { target?: { object?: THREE.Object3D } }) => {
+                    key={item.id} mode="translate" position={item.position}
+                    onMouseUp={(e: any) => {
                       if (e?.target?.object) {
                         const pos = e.target.object.position;
                         onUpdatePosition(item.id, [pos.x, pos.y, pos.z]);
@@ -235,8 +235,8 @@ const PreviewPanel = ({ data, onUpdatePosition, onUpdateRotation: _onUpdateRotat
               if (isSelected) {
                 return (
                   <TransformControls 
-                    key={item.id} mode={activeTool} position={item.position}
-                    onMouseUp={(e: { target?: { object?: THREE.Object3D } }) => {
+                    key={item.id} mode="translate" position={item.position}
+                    onMouseUp={(e: any) => {
                       if (e?.target?.object) {
                         const pos = e.target.object.position;
                         onUpdatePosition(item.id, [pos.x, pos.y, pos.z]);
@@ -272,7 +272,7 @@ const PreviewPanel = ({ data, onUpdatePosition, onUpdateRotation: _onUpdateRotat
                   key={item.id} 
                   mode="translate"
                   position={item.position}
-                  onMouseUp={(e: { target?: { object?: THREE.Object3D } }) => {
+                  onMouseUp={(e: any) => {
                     if (e?.target?.object) {
                       const pos = e.target.object.position;
                       const buffer = 0.5;
@@ -307,7 +307,7 @@ const PreviewPanel = ({ data, onUpdatePosition, onUpdateRotation: _onUpdateRotat
                   key="sun-transform"
                   mode="translate" 
                   position={sunPos}
-                  onMouseUp={(e: { target?: { object?: THREE.Object3D } }) => {
+                  onMouseUp={(e: any) => {
                     if (e?.target?.object) {
                       const pos = e.target.object.position;
                       onUpdatePosition('sun', [pos.x, pos.y, pos.z]);
