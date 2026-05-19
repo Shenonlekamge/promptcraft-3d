@@ -20,6 +20,8 @@ export type RoomData = {
 };
 
 const Home = () => {
+  // Uses VITE_API_URL env var in production, falls back to localhost for local dev
+  const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -204,7 +206,7 @@ const Home = () => {
               setGenerationError(null);
 
               try {
-                const response = await fetch("http://127.0.0.1:8000/generate-layout", {
+                const response = await fetch(`${API_URL}/generate-layout`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
